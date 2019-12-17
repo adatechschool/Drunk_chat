@@ -1,4 +1,5 @@
 require 'socket'
+require 'colorize'
 
 class Server
    def initialize(socket_address, socket_port)
@@ -19,7 +20,7 @@ class Server
       loop{
          client_connection = @server_socket.accept
          Thread.start(client_connection) do |conn| # open thread for each accepted connection
-             conn_name = conn.gets.chomp.to_sym
+             conn_name = conn.gets.chomp
             if(@connections_details[:clients][conn_name] != nil) # avoid connection if user exits
                conn.puts "This username already exist"
                conn.puts "quit"
@@ -37,7 +38,10 @@ class Server
 
    def establish_chatting(username, connection)
       loop do
-          message = connection.gets.chomp.blue
+          message = connection.gets.chomp
+          if message == "j'ai plus soif !"
+              exit
+          end
          #puts @connections_details[:clients]
          (@connections_details[:clients]).keys.each do |client|
              @connections_details[:clients][client].puts "#{username} : #{message}"

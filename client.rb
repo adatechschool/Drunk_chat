@@ -1,4 +1,5 @@
 require 'socket'
+require 'colorize'
 
 class Client
    def initialize(socket)
@@ -31,6 +32,10 @@ class Client
       begin
          Thread.new do
             loop do
+               if @socket.gets == nil
+                   puts "y'a plus de serveur !"
+                   exit
+               end
                response = @socket.gets.chomp
                puts "#{response}"
                if response.eql?'quit'
