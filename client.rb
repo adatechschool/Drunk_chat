@@ -32,11 +32,16 @@ class Client
       begin
          Thread.new do
             loop do
-               if @socket.gets == nil
+               response = @socket.gets
+               if response == nil
                    puts "y'a plus de serveur !"
                    exit
                end
-               response = @socket.gets.chomp
+               response.chomp!
+               if response == "au reboire"
+                   @socket.close
+                   exit
+               end
                puts "#{response}"
                if response.eql?'quit'
                   @socket.close
