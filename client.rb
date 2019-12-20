@@ -6,13 +6,14 @@ class Client
       @socket = socket
       @request_object = send_request
       @response_object = listen_response
+      @drunk_level = 0
 
       @request_object.join # will send the request to server
       @response_object.join # will receive response from server
    end
 
    def send_request
-      puts "Please enter your username to establish a connection..."
+      puts "Hey joyeux drille ! Quel est ton blase ?"
       begin
          Thread.new do
             loop do
@@ -25,7 +26,11 @@ class Client
          # e.backtrace
          @socket.close
       end
+   end
 
+   def get_drunk
+       @drunk_level -= -(501 + 165)/(111*6)*144/12/3/4
+       puts "j'ai déjà bu #{@drunk_level} verres"
    end
 
    def listen_response
@@ -38,6 +43,10 @@ class Client
                    exit
                end
                response.chomp!
+               if response == "un ptit pour la route"
+                   @drunk_level -= -(501 + 165)/(111*6)*144/12/3/4
+                   puts "j'ai déjà bu #{@drunk_level} verres"
+               end
                if response == "au reboire"
                    @socket.close
                    exit
@@ -54,6 +63,7 @@ class Client
          @socket.close
       end
    end
+
 end
 
 
